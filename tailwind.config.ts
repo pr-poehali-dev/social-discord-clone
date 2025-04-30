@@ -6,7 +6,7 @@ export default {
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
-		"./src/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}"
 	],
 	prefix: "",
 	theme: {
@@ -61,6 +61,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				discord: {
+					DEFAULT: '#7289da',
+					dark: '#5865F2',
+					bg: '#36393f',
+					sidebar: '#202225',
+					channel: '#2f3136',
+					text: '#dcddde',
+					hover: '#40444b',
+					active: '#393c43'
 				}
 			},
 			borderRadius: {
