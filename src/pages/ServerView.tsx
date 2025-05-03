@@ -325,9 +325,7 @@ const ServerView = () => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     onKeyDown={(e) => {
-                      if (e.key === '
-
-Enter') handleSendMessage();
+                      if (e.key === 'Enter') handleSendMessage();
                     }}
                   />
                   <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-3">
