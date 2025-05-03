@@ -1,56 +1,94 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  :root {
-    --background: 220 7% 18%;
-    --foreground: 0 0% 98%;
-
-    --card: 223 6% 19%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 223 6% 19%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 235 86% 65%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 222 6% 23%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 223 5% 23%;
-    --muted-foreground: 217 8% 70%;
-
-    --accent: 235 86% 65%;
-    --accent-foreground: 0 0% 100%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 222 6% 23%;
-    --input: 222 6% 23%;
-    --ring: 235 86% 65%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 220 3% 13%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 235 86% 65%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 223 6% 19%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 223 3% 21%;
-    --sidebar-ring: 235 86% 65%;
-  }
+:root {
+  --radius: 0.5rem;
+  
+  /* Base colors */
+  --background: 220 5% 23%;  /* #36393f */
+  --foreground: 210 9.1% 87.1%;  /* #dcddde */
+  
+  /* Discord specific colors */
+  --discord-bg: 220 5% 23%;  /* #36393f */
+  --discord-sidebar: 220 8% 14%;  /* #202225 */
+  --discord-channel: 220 8% 20%;  /* #2f3136 */
+  --discord-text: 210 9.1% 87.1%;  /* #dcddde */
+  --discord-hover: 210 5% 26%;  /* #40444b */
+  
+  /* Cards */
+  --card: 220 8% 14%;  /* Similar to sidebar */
+  --card-foreground: 210 9.1% 87.1%;  /* #dcddde */
+  
+  /* Primary (Discord blue) */
+  --primary: 235 86% 65%;  /* #5865F2 */
+  --primary-foreground: 0 0% 100%;  /* #ffffff */
+  
+  /* Secondary */
+  --secondary: 210 5% 26%;  /* #40444b - same as hover */
+  --secondary-foreground: 210 9.1% 87.1%;  /* #dcddde */
+  
+  /* Destructive (for errors) */
+  --destructive: 0 72% 51%;  /* #ed4245 - Discord's red */
+  --destructive-foreground: 0 0% 100%;  /* #ffffff */
+  
+  /* Muted */
+  --muted: 210 5% 26%;  /* #40444b - same as hover */
+  --muted-foreground: 217.9 10.6% 64.9%;  /* lighter version of text */
+  
+  /* Accent */
+  --accent: 235 86% 65%;  /* #5865F2 - same as primary */
+  --accent-foreground: 0 0% 100%;  /* #ffffff */
+  
+  /* Border */
+  --border: 220 8% 14%;  /* #202225 - same as sidebar */
+  
+  /* Input */
+  --input: 220 8% 14%;  /* #202225 - same as sidebar */
+  
+  /* Ring */
+  --ring: 235 86% 65%;  /* #5865F2 - same as primary */
+  
+  /* Popover */
+  --popover: 220 8% 14%;  /* #202225 - same as sidebar */
+  --popover-foreground: 210 9.1% 87.1%;  /* #dcddde */
+  
+  /* Sidebar */
+  --sidebar-background: 220 8% 14%;  /* #202225 */
+  --sidebar-foreground: 210 9.1% 87.1%;  /* #dcddde */
+  --sidebar-primary: 235 86% 65%;  /* #5865F2 */
+  --sidebar-primary-foreground: 0 0% 100%;  /* #ffffff */
+  --sidebar-accent: 235 86% 65%;  /* #5865F2 */
+  --sidebar-accent-foreground: 0 0% 100%;  /* #ffffff */
+  --sidebar-border: 220 8% 14%;  /* #202225 */
+  --sidebar-ring: 235 86% 65%;  /* #5865F2 */
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #202225;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #2f3136;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #393c43;
 }
