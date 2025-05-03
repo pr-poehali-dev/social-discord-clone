@@ -1,35 +1,31 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { SidebarProvider, Sidebar, SidebarContent } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarContent, SidebarInset } from "@/components/ui/sidebar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Plus, Compass, Download } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Home, Settings, Sparkles, Plus, UserPlus } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
+import { useData } from "@/context/DataContext";
 import { useToast } from "@/components/ui/use-toast";
 import ServerIcon from "@/components/ServerIcon";
-import { useAuth } from "@/context/AuthContext";
-import { Separator } from "@/components/ui/separator";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
+  const { servers, createServer } = useData();
+  
   const [createServerOpen, setCreateServerOpen] = useState(false);
   const [serverName, setServerName] = useState("");
-  const [servers, setServers] = useState([
-    { id: "1", name: "Главный сервер", icon: "" },
-    { id: "2", name: "Игры", icon: "" },
-    { id: "3", name: "Программирование", icon: "" }
-  ]);
-
-  useEffect(() => {
-    // В реальном приложении здесь был бы запрос на получение серверов
-  }, []);
-
-  const handleCreateServer = () => {
-    if (serverName.trim() === "") {
+  const [isCreatingServer, setIsCreatingServer] = useState(false);
+  
+  const handleCreateServer = async () => {
+    if (!serverName.trim()) {
       toast({
         title: "Ошибка",
         description: "Введите название сервера",
@@ -37,25 +33,30 @@ const Dashboard = () => {
       });
       return;
     }
-
-    // Создаем новый сервер
-    const newServer = {
-      id: `${servers.length + 1}`,
-      name: serverName,
-      icon: ""
-    };
-
-    setServers([...servers, newServer]);
-    setCreateServerOpen(false);
-    setServerName("");
-
-    toast({
-      title: "Сервер создан",
-      description: `Сервер "${serverName}" успешно создан`,
-    });
-
-    // Переход на новый сервер
-    navigate(`/channels/${newServer.id}`);
+    
+    setIsCreatingServer(true);
+    
+    try {
+      const newServer = await createServer(serverName);
+      setCreateServerOpen(false);
+      setServerName("");
+      
+      toast({
+        title: "Сервер создан",
+        description: `Сервер "${serverName}" успешно создан`,
+      });
+      
+      // Переход на новый сервер
+      navigate(`/channels/${newServer.id}/${newServer.channels[0].id}`);
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось создать сервер",
+        variant: "destructive"
+      });
+    } finally {
+      setIsCreatingServer(false);
+    }
   };
 
   return (
@@ -64,9 +65,10 @@ const Dashboard = () => {
         {/* Servers sidebar */}
         <Sidebar collapsible="icon" className="w-[72px] bg-discord-sidebar border-0">
           <SidebarContent className="py-2 px-2 gap-3">
-            <ServerIcon 
-              isHome 
-              active={location.pathname.includes('@me')} 
+            <Server
+
+Icon 
+              isHome
               onClick={() => navigate("/channels/@me")} 
             />
             <Separator className="mx-2 bg-discord-hover/30" />
@@ -74,103 +76,126 @@ const Dashboard = () => {
             {servers.map(server => (
               <ServerIcon 
                 key={server.id} 
-                name={server.name} 
-                icon={server.icon} 
-                active={location.pathname.includes(`/channels/${server.id}`)} 
+                name={server.name}
+                icon={server.icon}
                 onClick={() => navigate(`/channels/${server.id}`)} 
               />
             ))}
             
             <ServerIcon 
-              isAdd 
+              isAdd
               onClick={() => setCreateServerOpen(true)} 
             />
-
-            <Separator className="mx-2 bg-discord-hover/30" />
-
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-discord-channel hover:rounded-2xl hover:bg-discord-active text-discord-active hover:text-white transition-all cursor-pointer mb-2" title="Открыть поиск серверов">
-              <Compass className="w-5 h-5" />
-            </div>
-
-            <div className="w-12 h-12 flex items-center justify-center rounded-full bg-discord-channel hover:rounded-2xl hover:bg-[#3ba55c] text-[#3ba55c] hover:text-white transition-all cursor-pointer mb-2" title="Загрузить приложение">
-              <Download className="w-5 h-5" />
-            </div>
           </SidebarContent>
         </Sidebar>
-
+        
+        {/* Main content */}
+        <SidebarInset className="bg-discord-bg flex flex-col items-center justify-center">
+          <div className="max-w-2xl w-full p-8">
+            <div className="text-center mb-10">
+              <h1 className="text-3xl font-bold text-white mb-3">Добро пожаловать в Discord</h1>
+              <p className="text-discord-text">
+                Давайте начнем общение в вашем личном Discord-пространстве!
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Button 
+                className="flex flex-col items-center gap-4 h-48 bg-discord-channel hover:bg-discord-hover border-none"
+                onClick={() => navigate("/channels/@me")}
+              >
+                <Home className="h-16 w-16 text-[#5865F2]" />
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-white">Личные сообщения</h3>
+                  <p className="text-sm text-discord-text">Общайтесь с друзьями напрямую</p>
+                </div>
+              </Button>
+              
+              <Button 
+                className="flex flex-col items-center gap-4 h-48 bg-discord-channel hover:bg-discord-hover border-none"
+                onClick={() => setCreateServerOpen(true)}
+              >
+                <Plus className="h-16 w-16 text-[#5865F2]" />
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-white">Создать сервер</h3>
+                  <p className="text-sm text-discord-text">Создайте новое сообщество</p>
+                </div>
+              </Button>
+              
+              <Button 
+                className="flex flex-col items-center gap-4 h-48 bg-discord-channel hover:bg-discord-hover border-none"
+                onClick={() => navigate("/settings")}
+              >
+                <Settings className="h-16 w-16 text-[#5865F2]" />
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-white">Настройки</h3>
+                  <p className="text-sm text-discord-text">Настройте Discord под себя</p>
+                </div>
+              </Button>
+              
+              <Button 
+                className="flex flex-col items-center gap-4 h-48 bg-discord-channel hover:bg-discord-hover border-none"
+                onClick={() => navigate("/nitro")}
+              >
+                <Sparkles className="h-16 w-16 text-[#5865F2]" />
+                <div className="text-center">
+                  <h3 className="text-lg font-bold text-white">Discord Nitro</h3>
+                  <p className="text-sm text-discord-text">Получите расширенные возможности</p>
+                </div>
+              </Button>
+            </div>
+            
+            <div className="mt-10">
+              <Button
+                className="w-full py-6 text-lg bg-[#5865F2] hover:bg-[#4752c4]"
+                onClick={() => navigate("/channels/@me")}
+              >
+                <UserPlus className="h-5 w-5 mr-2" />
+                Начните общение
+              </Button>
+            </div>
+          </div>
+        </SidebarInset>
+        
         {/* Create Server Dialog */}
         <Dialog open={createServerOpen} onOpenChange={setCreateServerOpen}>
-          <DialogContent className="bg-discord-bg text-discord-text border-none max-w-md">
+          <DialogContent className="bg-discord-bg text-discord-text border-none">
             <DialogHeader>
-              <DialogTitle className="text-white text-center text-2xl font-bold">
-                Настроить сервер
-              </DialogTitle>
-              <DialogDescription className="text-center">
-                Создайте сервер для ваших друзей и сообществ. Вы будете его владельцем.
-              </DialogDescription>
+              <DialogTitle className="text-white text-center">Создание сервера</DialogTitle>
             </DialogHeader>
-
-            <div className="space-y-6 py-4">
-              <div className="flex justify-center">
-                <div className="w-24 h-24 rounded-full bg-discord-hover flex items-center justify-center cursor-pointer hover:bg-discord-sidebar">
-                  <Plus className="w-8 h-8 text-discord-text" />
-                </div>
+            
+            <div className="space-y-4 py-4">
+              <div className="flex justify-center mb-2">
+                <Avatar className="h-20 w-20">
+                  <AvatarFallback>{serverName ? serverName[0] : "D"}</AvatarFallback>
+                </Avatar>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="server-name" className="text-xs font-semibold text-discord-text">
-                  НАЗВАНИЕ СЕРВЕРА
-                </Label>
+              
+              <div>
+                <label className="text-xs uppercase text-discord-text block mb-2">НАЗВАНИЕ СЕРВЕРА</label>
                 <Input
-                  id="server-name"
                   value={serverName}
                   onChange={(e) => setServerName(e.target.value)}
-                  placeholder={`Сервер ${user?.username || 'пользователя'}`}
+                  placeholder="Придумайте название для сервера"
                   className="bg-discord-sidebar border-discord-hover text-white"
                 />
-              </div>
-
-              <div className="text-sm">
-                Создавая сервер, вы соглашаетесь с {" "}
-                <a href="#" className="text-[#00a8fc] hover:underline">
-                  Правилами сообщества Discord
-                </a>
+                <p className="text-xs text-discord-text/70 mt-1">
+                  Вы всегда сможете изменить это позже.
+                </p>
               </div>
             </div>
-
-            <DialogFooter className="flex">
-              <Button
-                variant="outline"
-                onClick={() => setCreateServerOpen(false)}
-                className="border-0 text-discord-text"
+            
+            <DialogFooter className="flex-col space-y-2 sm:space-y-0">
+              <Button 
+                className="w-full bg-[#5865F2] hover:bg-[#4752c4]"
+                disabled={isCreatingServer || !serverName.trim()}
+                onClick={handleCreateServer}
               >
-                Отмена
-              </Button>
-              <Button onClick={handleCreateServer} className="bg-[#5865F2] hover:bg-[#4752c4]">
-                Создать
+                {isCreatingServer ? "Создание..." : "Создать сервер"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
-
-        {/* Main content - Select a server prompt */}
-        <div className="flex-1 flex items-center justify-center flex-col p-6 text-center">
-          <img 
-            src="https://images.unsplash.com/photo-1618401471353-b98afee0b2eb?auto=format&fit=crop&q=80&w=200" 
-            alt="Discord" 
-            className="w-24 h-24 mb-6 rounded-full"
-          />
-          <h1 className="text-2xl font-bold text-white mb-2">Добро пожаловать, {user?.username || 'пользователь'}!</h1>
-          <p className="text-discord-text mb-6 max-w-md">
-            Это ваша личная страница Discord. Выберите сервер слева, чтобы начать общение, или создайте новый.
-          </p>
-          <Button 
-            className="bg-[#5865F2] hover:bg-[#4752c4] text-white"
-            onClick={() => setCreateServerOpen(true)}
-          >
-            Создать сервер
-          </Button>
-        </div>
       </div>
     </SidebarProvider>
   );

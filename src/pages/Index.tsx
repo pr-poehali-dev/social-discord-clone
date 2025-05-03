@@ -1,249 +1,191 @@
 
 import { useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/context/AuthContext";
 
 const Index = () => {
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (user) {
       navigate("/channels/@me");
     }
-  }, [isAuthenticated, navigate]);
+  }, [user, navigate]);
 
   return (
     <div className="min-h-screen bg-discord-bg">
-      {/* Навигация */}
-      <nav className="bg-[#404EED] px-6 py-4">
-        <div className="mx-auto flex max-w-7xl items-center justify-between">
-          <div className="flex items-center text-xl font-bold text-white">
-            <svg width="124" height="34" viewBox="0 0 124 34" className="h-8">
-              <g fill="currentColor">
-                <path d="M26.0015 6.9529C24.0021 6.03845 21.8787 5.37198 19.6623 5C19.3459 5.5819 18.9912 6.38015 18.7493 7.01262C16.4282 6.66301 14.1305 6.66301 11.8526 7.01262C11.6107 6.38015 11.2491 5.5819 10.9328 5C8.71636 5.37198 6.59296 6.03845 4.59361 6.9529C0.66366 12.8736 -0.405386 18.6548 0.127411 24.3585C2.79252 26.3243 5.36229 27.5219 7.89473 28.2929C8.51697 27.4353 9.07446 26.5097 9.55466 25.5233C8.64819 25.1679 7.77895 24.7418 6.95652 24.2571C7.17731 24.0942 7.39279 23.9238 7.60045 23.7497C12.6426 26.0881 18.1178 26.0881 23.0978 23.7497C23.3055 23.9238 23.521 24.0942 23.7417 24.2571C22.9193 24.7418 22.0501 25.1679 21.1436 25.5233C21.6238 26.5097 22.1813 27.4353 22.8036 28.2929C25.336 27.5219 27.9058 26.3243 30.5709 24.3585C31.184 17.7559 29.4637 12.0212 26.0015 6.9529ZM10.2527 20.8402C8.73376 20.8402 7.49573 19.4607 7.49573 17.7816C7.49573 16.1024 8.70819 14.7229 10.2527 14.7229C11.7972 14.7229 13.0352 16.1024 13.0096 17.7816C13.0096 19.4607 11.7972 20.8402 10.2527 20.8402ZM20.4373 20.8402C18.9183 20.8402 17.6803 19.4607 17.6803 17.7816C17.6803 16.1024 18.8928 14.7229 20.4373 14.7229C21.9817 14.7229 23.2198 16.1024 23.1941 17.7816C23.1941 19.4607 21.9817 20.8402 20.4373 20.8402Z"></path>
-                <path d="M41.2697 9.86615H47.8585C49.4394 9.86615 50.7878 10.1996 51.8883 10.8664C52.9887 11.5332 53.8114 12.4472 54.3539 13.6083C54.8964 14.7693 55.168 16.0925 55.168 17.5676C55.168 19.0478 54.8913 20.3734 54.3379 21.5396C53.7845 22.7058 52.9405 23.6211 51.8058 24.2879C50.6712 24.9547 49.2791 25.2881 47.6392 25.2881H41.2697V9.86615ZM47.5994 22.3932C48.6315 22.3932 49.477 22.1908 50.1357 21.7861C50.7945 21.3766 51.2739 20.8083 51.5738 20.0811C51.8736 19.354 52.0236 18.5158 52.0236 17.5676C52.0236 16.6193 51.8736 15.7828 51.5738 15.0581C51.2739 14.3334 50.7945 13.7669 50.1357 13.3574C49.477 12.9478 48.6315 12.7429 47.5994 12.7429H44.4141V22.3932H47.5994Z"></path>
-                <path d="M65.4362 25.5335C64.0332 25.5335 62.8089 25.2053 61.7634 24.5488C60.7179 23.8923 59.9178 22.9753 59.363 21.798C58.8082 20.6207 58.5308 19.2293 58.5308 17.6239C58.5308 16.0185 58.8082 14.6271 59.363 13.4498C59.9178 12.2725 60.7179 11.3555 61.7634 10.699C62.8089 10.0425 64.0332 9.71427 65.4362 9.71427C66.8393 9.71427 68.0636 10.0425 69.1091 10.699C70.1546 11.3555 70.9547 12.2725 71.5095 13.4498C72.0642 14.6271 72.3417 16.0185 72.3417 17.6239C72.3417 19.2293 72.0642 20.6207 71.5095 21.798C70.9547 22.9753 70.1546 23.8923 69.1091 24.5488C68.0636 25.2053 66.8393 25.5335 65.4362 25.5335ZM65.4362 22.7836C66.2576 22.7836 66.9529 22.5693 67.522 22.1405C68.0911 21.7117 68.5257 21.1109 68.8255 20.3383C69.1254 19.5656 69.2754 18.6577 69.2754 17.6239C69.2754 16.5901 69.1254 15.6848 68.8255 14.9122C68.5257 14.1396 68.0911 13.5388 67.522 13.11C66.9529 12.6812 66.2576 12.4668 65.4362 12.4668C64.6149 12.4668 63.9196 12.6812 63.3505 13.11C62.7814 13.5388 62.3468 14.1396 62.047 14.9122C61.7472 15.6848 61.5972 16.5901 61.5972 17.6239C61.5972 18.6577 61.7472 19.5656 62.047 20.3383C62.3468 21.1109 62.7814 21.7117 63.3505 22.1405C63.9196 22.5693 64.6149 22.7836 65.4362 22.7836Z"></path>
-                <path d="M78.3023 25.2881V9.86615H81.4307V22.3932H89.2556V25.2881H78.3023Z"></path>
-                <path d="M91.3184 25.2881V9.86615H94.4628V22.3932H102.288V25.2881H91.3184Z"></path>
-                <path d="M108.176 25.5335C106.833 25.5335 105.65 25.223 104.626 24.6022C103.602 23.9814 102.807 23.0949 102.242 21.9429C101.677 20.791 101.394 19.3919 101.394 17.7459C101.394 16.0641 101.677 14.6423 102.242 13.4803C102.807 12.3184 103.612 11.427 104.658 10.8062C105.703 10.1854 106.93 9.87496 108.337 9.87496C109.311 9.87496 110.214 10.0528 111.046 10.4084C111.879 10.7641 112.594 11.2847 113.192 11.9704C113.79 12.6561 114.224 13.5067 114.493 14.5222H111.364C111.164 13.8922 110.797 13.3592 110.262 12.9231C109.727 12.487 109.055 12.269 108.248 12.269C107.484 12.269 106.82 12.4602 106.256 12.8426C105.692 13.2249 105.257 13.7815 104.953 14.5121C104.648 15.2428 104.496 16.1273 104.496 17.1659C104.496 18.2044 104.648 19.0939 104.953 19.8347C105.257 20.5755 105.692 21.1422 106.256 21.5348C106.82 21.9274 107.479 22.1237 108.232 22.1237C108.775 22.1237 109.273 22.0422 109.724 21.8791C110.174 21.7159 110.558 21.4797 110.874 21.1703C111.19 20.861 111.41 20.4786 111.533 20.0229H114.654C114.41 21.0179 113.978 21.8842 113.359 22.6216C112.74 23.359 111.969 23.9304 111.046 24.3357C110.123 24.7409 109.109 25.5335 108.176 25.5335Z"></path>
-                <path d="M122.253 25.5335C120.85 25.5335 119.626 25.2154 118.58 24.5793C117.534 23.9432 116.729 23.0364 116.164 21.8591C115.599 20.6819 115.317 19.3005 115.317 17.7152C115.317 16.1299 115.599 14.7434 116.164 13.5559C116.729 12.3683 117.534 11.4564 118.58 10.8202C119.626 10.1841 120.85 9.86606 122.253 9.86606C123.656 9.86606 124.88 10.1841 125.926 10.8202C126.972 11.4564 127.777 12.3683 128.342 13.5559C128.907 14.7434 129.19 16.1299 129.19 17.7152C129.19 19.3005 128.907 20.6819 128.342 21.8591C127.777 23.0364 126.972 23.9432 125.926 24.5793C124.88 25.2154 123.656 25.5335 122.253 25.5335ZM122.253 22.7836C123.074 22.7836 123.77 22.5693 124.339 22.1405C124.908 21.7117 125.342 21.1109 125.642 20.3383C125.942 19.5657 126.092 18.6678 126.092 17.6443C126.092 16.6208 125.942 15.7229 125.642 14.9504C125.342 14.1778 124.908 13.5769 124.339 13.1481C123.77 12.7193 123.074 12.505 122.253 12.505C121.431 12.505 120.736 12.7193 120.167 13.1481C119.598 13.5769 119.164 14.1778 118.864 14.9504C118.564 15.7229 118.414 16.6208 118.414 17.6443C118.414 18.6678 118.564 19.5657 118.864 20.3383C119.164 21.1109 119.598 21.7117 120.167 22.1405C120.736 22.5693 121.431 22.7836 122.253 22.7836Z"></path>
-              </g>
-            </svg>
+      {/* Hero Section */}
+      <header className="bg-[#404EED] py-6">
+        <nav className="container mx-auto px-4 flex justify-between items-center">
+          <div className="text-white text-2xl font-bold">
+            DISCORD
           </div>
-          <div className="hidden space-x-8 md:flex">
-            <a href="#" className="text-white hover:underline">
-              Загрузить
-            </a>
-            <a href="#" className="text-white hover:underline">
-              Nitro
-            </a>
-            <a href="#" className="text-white hover:underline">
-              Discover
-            </a>
-            <a href="#" className="text-white hover:underline">
-              Безопасность
-            </a>
-            <a href="#" className="text-white hover:underline">
-              Поддержка
-            </a>
-            <a href="#" className="text-white hover:underline">
-              Блог
-            </a>
-            <a href="#" className="text-white hover:underline">
-              Карьера
-            </a>
+          <div className="hidden md:flex items-center gap-6">
+            <Link to="#" className="text-white hover:underline">Загрузить</Link>
+            <Link to="#" className="text-white hover:underline">Nitro</Link>
+            <Link to="#" className="text-white hover:underline">Поддержка</Link>
           </div>
           <div>
-            <Link to="/login">
-              <Button size="sm" variant="secondary" className="bg-white hover:bg-gray-100 text-black">
-                Войти
-              </Button>
-            </Link>
+            <Button 
+              variant="secondary" 
+              className="bg-white text-black hover:bg-gray-100 rounded-full"
+              onClick={() => navigate("/login")}
+            >
+              Войти
+            </Button>
           </div>
-        </div>
-      </nav>
-
-      {/* Главная секция */}
-      <section className="bg-[#404EED] px-6 py-20 text-white">
-        <div className="mx-auto max-w-4xl text-center">
-          <h1 className="mb-6 text-5xl font-bold md:text-6xl">ПРЕДСТАВЬТЕ МЕСТО...</h1>
-          <p className="mb-8 text-lg md:text-xl">
-            ...где вы сможете быть частью школьной компании, игрового клана или просто тусоваться с
-            друзьями. Место, где так просто общаться каждый день и чаще тусоваться вместе.
+        </nav>
+        
+        <div className="container mx-auto px-4 pt-20 pb-24 text-center">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6">
+            ПРЕДСТАВЬ СЕБЕ МЕСТО...
+          </h1>
+          <p className="text-white text-lg md:text-xl max-w-3xl mx-auto mb-8">
+            ...где можно вместе с друзьями быть частью школьного клуба, игровой группы или мирового сообщества.
+            Место, где можно просто тусоваться и проводить время вместе.
           </p>
-          <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0 justify-center">
-            <Link to="/register">
-              <Button size="lg" className="bg-white text-black hover:bg-gray-100 hover:shadow-lg">
-                Зарегистрироваться
-              </Button>
-            </Link>
-            <Link to="/channels/@me">
-              <Button size="lg" className="bg-[#23272A] text-white hover:bg-[#2C2F33]">
-                Открыть Discord в браузере
-              </Button>
-            </Link>
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <Button className="bg-white text-black hover:bg-gray-100 text-lg py-6 px-8">
+              Загрузить для Windows
+            </Button>
+            <Button 
+              variant="secondary" 
+              className="bg-[#23272A] text-white hover:bg-gray-800 text-lg py-6 px-8"
+              onClick={() => navigate("/register")}
+            >
+              Открыть Discord в браузере
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Features Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="md:w-1/2">
+              <img 
+                src="https://images.unsplash.com/photo-1607799279861-4dd421887fb3?w=800&q=80" 
+                alt="Общение в дискорде" 
+                className="rounded-lg"
+              />
+            </div>
+            <div className="md:w-1/2">
+              <h2 className="text-3xl font-bold mb-4">Создавай места для общения по интересам</h2>
+              <p className="text-lg text-gray-700">
+                Discord-серверы организованы по тематическим каналам, где можно сотрудничать, делиться информацией и просто разговаривать о своём дне, не переполняя групповой чат.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Секция с фичами */}
-      <section className="bg-white px-6 py-20">
-        <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-2 items-center">
-          <div>
-            <img
-              src="https://discord.com/assets/46b2132c01604c9493d558de444929f4.svg"
-              alt="Discord Servers Illustration"
-              className="w-full"
-            />
-          </div>
-          <div>
-            <h2 className="mb-6 text-3xl font-bold text-[#23272A]">
-              Создайте пространство, где вам захочется находиться
-            </h2>
-            <p className="text-lg text-[#23272A]">
-              Управляемые серверы Discord — это организованные места, где вы можете общаться,
-              делиться и просто разговаривать. Они созданы для многолюдных и не очень групп, которые
-              хотят проводить время вместе.
-            </p>
+      <section className="py-16 bg-gray-100">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row-reverse items-center gap-8">
+            <div className="md:w-1/2">
+              <img 
+                src="https://images.unsplash.com/photo-1611162616475-46b635cb6868?w=800&q=80" 
+                alt="Голосовые каналы" 
+                className="rounded-lg"
+              />
+            </div>
+            <div className="md:w-1/2">
+              <h2 className="text-3xl font-bold mb-4">Где можно легко общаться</h2>
+              <p className="text-lg text-gray-700">
+                Заходи в голосовой канал, когда у тебя есть время. Друзья на твоём сервере увидят, что ты в сети, и сразу смогут присоединиться к разговору без необходимости звонить.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Футер */}
-      <footer className="bg-[#23272A] px-6 py-12 text-white">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 grid gap-8 md:grid-cols-4">
-            <div>
-              <h3 className="mb-4 text-[#5865F2] font-bold">ПРОДУКТ</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:underline">
-                    Загрузить
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Nitro
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Статус
-                  </a>
-                </li>
-              </ul>
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div className="md:w-1/2">
+              <img 
+                src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80" 
+                alt="Сообщества" 
+                className="rounded-lg"
+              />
             </div>
-            <div>
-              <h3 className="mb-4 text-[#5865F2] font-bold">КОМПАНИЯ</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:underline">
-                    О нас
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Вакансии
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Бренд
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Новости
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 text-[#5865F2] font-bold">РЕСУРСЫ</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:underline">
-                    Поддержка
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Безопасность
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Блог
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Обратная связь
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Разработчикам
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    StreamKit
-                  </a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="mb-4 text-[#5865F2] font-bold">ПОЛИТИКИ</h3>
-              <ul className="space-y-2 text-sm">
-                <li>
-                  <a href="#" className="hover:underline">
-                    Условия
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Конфиденциальность
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Настройки файлов cookie
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Руководства
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Подтверждение
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline">
-                    Лицензии
-                  </a>
-                </li>
-              </ul>
+            <div className="md:w-1/2">
+              <h2 className="text-3xl font-bold mb-4">От нескольких друзей до целого сообщества</h2>
+              <p className="text-lg text-gray-700">
+                Настрой сервер, добавив инструменты для модерации и пользовательские права доступа к каналам. Дай участникам особые возможности, создавай приватные каналы и многое другое.
+              </p>
             </div>
           </div>
-          <div className="border-t border-[#5865F2] pt-8 flex justify-between items-center">
-            <div className="text-xl font-bold text-white">
-              <svg width="124" height="34" viewBox="0 0 124 34" className="h-8">
-                <g fill="currentColor">
-                  <path d="M26.0015 6.9529C24.0021 6.03845 21.8787 5.37198 19.6623 5C19.3459 5.5819 18.9912 6.38015 18.7493 7.01262C16.4282 6.66301 14.1305 6.66301 11.8526 7.01262C11.6107 6.38015 11.2491 5.5819 10.9328 5C8.71636 5.37198 6.59296 6.03845 4.59361 6.9529C0.66366 12.8736 -0.405386 18.6548 0.127411 24.3585C2.79252 26.3243 5.36229 27.5219 7.89473 28.2929C8.51697 27.4353 9.07446 26.5097 9.55466 25.5233C8.64819 25.1679 7.77895 24.7418 6.95652 24.2571C7.17731 24.0942 7.39279 23.9238 7.60045 23.7497C12.6426 26.0881 18.1178 26.0881 23.0978 23.7497C23.3055 23.9238 23.521 24.0942 23.7417 24.2571C22.9193 24.7418 22.0501 25.1679 21.1436 25.5233C21.6238 26.5097 22.1813 27.4353 22.8036 28.2929C25.336 27.5219 27.9058 26.3243 30.5709 24.3585C31.184 17.7559 29.4637 12.0212 26.0015 6.9529ZM10.2527 20.8402C8.73376 20.8402 7.49573 19.4607 7.49573 17.7816C7.49573 16.1024 8.70819 14.7229 10.2527 14.7229C11.7972 14.7229 13.0352 16.1024 13.0096 17.7816C13.0096 19.4607 11.7972 20.8402 10.2527 20.8402ZM20.4373 20.8402C18.9183 20.8402 17.6803 19.4607 17.6803 17.7816C17.6803 16.1024 18.8928 14.7229 20.4373 14.7229C21.9817 14.7229 23.2198 16.1024 23.1941 17.7816C23.1941 19.4607 21.9817 20.8402 20.4373 20.8402Z"></path>
-                </g>
-              </svg>
+        </div>
+      </section>
+
+      {/* Call To Action */}
+      <section className="py-16 bg-[#404EED] text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-6">Готов начать своё путешествие?</h2>
+          <Button 
+            className="bg-white text-[#404EED] hover:bg-gray-100 text-lg py-6 px-8"
+            onClick={() => navigate("/register")}
+          >
+            Зарегистрируйся сейчас
+          </Button>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 bg-[#23272A] text-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-[#5865F2] font-bold text-2xl mb-4">DISCORD</h3>
+              <div className="space-y-2">
+                <Link to="#" className="block hover:underline">Загрузить</Link>
+                <Link to="#" className="block hover:underline">Nitro</Link>
+                <Link to="#" className="block hover:underline">Статус</Link>
+              </div>
             </div>
-            <Link to="/register">
-              <Button className="bg-[#5865F2] text-white hover:bg-[#4752c4]">
-                Зарегистрироваться
-              </Button>
-            </Link>
+            
+            <div>
+              <h3 className="text-[#5865F2] font-bold mb-4">Компания</h3>
+              <div className="space-y-2">
+                <Link to="#" className="block hover:underline">О нас</Link>
+                <Link to="#" className="block hover:underline">Работа</Link>
+                <Link to="#" className="block hover:underline">Блог</Link>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-[#5865F2] font-bold mb-4">Ресурсы</h3>
+              <div className="space-y-2">
+                <Link to="#" className="block hover:underline">Поддержка</Link>
+                <Link to="#" className="block hover:underline">Безопасность</Link>
+                <Link to="#" className="block hover:underline">Сообщество</Link>
+              </div>
+            </div>
+            
+            <div>
+              <h3 className="text-[#5865F2] font-bold mb-4">Политики</h3>
+              <div className="space-y-2">
+                <Link to="#" className="block hover:underline">Условия</Link>
+                <Link to="#" className="block hover:underline">Конфиденциальность</Link>
+                <Link to="#" className="block hover:underline">Настройки файлов cookie</Link>
+              </div>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-700 mt-8 pt-8 flex justify-between items-center">
+            <div className="text-2xl font-bold">
+              DISCORD
+            </div>
+            <Button 
+              className="bg-[#5865F2] hover:bg-[#4752c4]"
+              onClick={() => navigate("/register")}
+            >
+              Зарегистрироваться
+            </Button>
           </div>
         </div>
       </footer>

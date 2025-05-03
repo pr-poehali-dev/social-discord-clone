@@ -1,16 +1,19 @@
 
 import { Navigate } from "react-router-dom";
 import { useAuth } from "@/context/AuthContext";
-import { ReactNode } from "react";
 
-interface PrivateRouteProps {
-  children: ReactNode;
-}
+const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isLoading } = useAuth();
+  
+  if (isLoading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center bg-discord-bg">
+        <div className="text-white text-lg animate-pulse">Загрузка...</div>
+      </div>
+    );
+  }
 
-const PrivateRoute = ({ children }: PrivateRouteProps) => {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
+  if (!user) {
     return <Navigate to="/login" replace />;
   }
 
